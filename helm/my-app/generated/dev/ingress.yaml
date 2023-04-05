@@ -1,0 +1,25 @@
+---
+# Source: my-app/templates/ingress.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: my-app-ing
+  labels:
+    helm.sh/chart: my-app
+    app.kubernetes.io/name: my-app
+    app.kubernetes.io/instance: my-app
+    app.kubernetes.io/managed-by: Helm
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`my-app.localhost`) && Path(`/`)
+      kind: Rule
+      services:
+        - name: my-app-svc
+          port: 80
+    - match: Host(`whoami.localhost`) && Path(`/`)
+      kind: Rule
+      services:
+        - name: whoami-svc
+          port: 80

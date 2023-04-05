@@ -1,0 +1,15 @@
+{{- range $app := $.Values.applications}}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $app.name }}
+  labels: {{- include "my-app.labels" (list $ $app)}}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ $app.name }}
+  minReplicas: {{ $app.minReplicas | default $.Values.autoscaling.minReplicas }}
+  maxReplicas: {{ $app.maxReplicas | default $.Values.autoscaling.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ $app.targetCPUUtilizationPercentage | default $.Values.autoscaling.targetCPUUtilizationPercentage }}
+{{- end }}

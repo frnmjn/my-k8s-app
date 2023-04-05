@@ -1,0 +1,17 @@
+{{- range $app := .Values.applications}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ $app.name }}-test-connection"
+  labels:
+    {{- include "my-app.labels" (list $ $app) | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ $app.name }}:{{ $.Values.service.port }}']
+  restartPolicy: Never
+{{- end}}

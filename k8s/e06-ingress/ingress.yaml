@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ing
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: my-app
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: my-app-svc
+                port:
+                  number: 80
+    - host: whoami
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: whoami-svc
+                port:
+                  number: 80
